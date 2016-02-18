@@ -146,7 +146,10 @@ assert(     r_test.is_true_equation([3,4, 1,5, 1,9, RiddleType1.EQUAL, RiddleTyp
 assert(     r_test.is_true_equation([3,4, 5,3, 1,9, RiddleType1.EQUAL, RiddleType1.MINUS])) # 34 = 53 - 19?
 assert(     r_test.is_true_equation([0,4, 1,5, 1,9, RiddleType1.PLUS, RiddleType1.EQUAL])) # 04 + 15 = 19?
 
-
+assert(list(r_test.get_range(0)) == [0,1,2,3,4,5,6,7,8,9])
+assert(list(r_test.get_range(5)) == [0,1,2,3,4,5,6,7,8,9])
+assert(list(r_test.get_range(6)) == [r_test.PLUS, r_test.MINUS, r_test.EQUAL])
+assert(list(r_test.get_range(7)) == [r_test.PLUS, r_test.MINUS, r_test.EQUAL])
 
 def recursive_try(equation_class, equation = None, current_ciffer_position = None,
                   total_taken = 0, total_added = 0):
@@ -166,13 +169,12 @@ def recursive_try(equation_class, equation = None, current_ciffer_position = Non
         now_added = total_added + sticks_to_add
         now_taken = total_taken + sticks_to_take
 
-        if not equation_class.is_valid_equation(changed_calc):
-            continue
-
-        if current_ciffer_position == len(equation) - 1: # last recursion level
-            if equation_class.is_valid_transformation(now_added, now_taken) and \
+        # last recursion level
+        if current_ciffer_position == len(equation) - 1:
+            if equation_class.is_valid_equation(changed_calc) and \
+                equation_class.is_valid_transformation(now_added, now_taken) and \
                 equation_class.is_true_equation(changed_calc):
-                all_solutions.append( (changed_calc.copy(), now_added, now_taken) )
+                    all_solutions.append( (changed_calc.copy(), now_added, now_taken) )
 
         elif equation_class.is_valid_step(now_added, now_taken):
             new_solutions = recursive_try(equation_class, changed_calc, 
